@@ -1,5 +1,4 @@
 
-import javax.swing.JPanel;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
