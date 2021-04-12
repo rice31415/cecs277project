@@ -46,12 +46,14 @@ class App extends JFrame {
         
         mainPanel.add(topPanel, BorderLayout.NORTH);
         
+        
         this.add(mainPanel);
         this.setSize(690, 420);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
     
+    //Creates the top menu bar based on Hoffman's directions
     private void buildMenu() {
         buildFileMenu();
         buildTreeMenu();
