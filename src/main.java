@@ -1,5 +1,7 @@
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 
@@ -54,4 +56,13 @@ public class main {
                            " Total Space: " + file.getTotalSpace());
     }
     
+    public void openFile(String filePath) {
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            desktop.open(new File(filePath));
+        }
+        catch (IOException e) {
+            System.out.println(e.toString());
+        }
+    }
 }
