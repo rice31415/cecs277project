@@ -1,5 +1,6 @@
 
 import javax.swing.JInternalFrame;
+import javax.swing.JSplitPane;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -12,9 +13,11 @@ import javax.swing.JInternalFrame;
  * @author Eric
  */
 public class FileManagerFrame extends JInternalFrame{
-    //Still need to look at split panes
+    JSplitPane splitPane;
     public FileManagerFrame() {
         this.setTitle("C:\\"); //get current file path later
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new DirPanel(), new FilePanel());
+        this.getContentPane().add(splitPane);
         this.setClosable(true);
         this.setMaximizable(true);
         this.setIconifiable(true);
