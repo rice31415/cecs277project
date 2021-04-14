@@ -1,9 +1,16 @@
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import javax.swing.JButton;
+import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -24,28 +31,35 @@ class App extends JFrame {
     
     JPanel mainPanel, topPanel;
     JButton button;
-    JMenuBar menuBar;
+    JDesktopPane desktopPane;
+    JMenuBar menuBar, statusBar;
     
     public App() {
         mainPanel = new JPanel();
         topPanel = new JPanel();
         button = new JButton("Button");
+        desktopPane = new JDesktopPane();
         menuBar = new JMenuBar();
+        statusBar = new JMenuBar();
+        
+        mainPanel.setLayout(new BorderLayout());
+        topPanel.setLayout(new BorderLayout());
     }
     
     public void go() {
         this.setTitle("CECS 277 File Manager");
-        mainPanel.setLayout(new BorderLayout());
-        topPanel.setLayout(new BorderLayout());
         
         buildMenu();
+        buildStatusBar();
         
         topPanel.add(menuBar, BorderLayout.NORTH);
-        topPanel.add(button, BorderLayout.SOUTH);
-        button.addActionListener(new okActionListener());
+        
+        FileManagerFrame fileManFrame = new FileManagerFrame();
+        desktopPane.add(fileManFrame);
         
         mainPanel.add(topPanel, BorderLayout.NORTH);
-        
+        mainPanel.add(desktopPane, BorderLayout.CENTER);
+        mainPanel.add(statusBar, BorderLayout.SOUTH);
         
         this.add(mainPanel);
         this.setSize(690, 420);
@@ -120,6 +134,50 @@ class App extends JFrame {
         
     }
     
+    private void buildStatusBar() {
+        JLabel status = new JLabel(displayDiskStatus("C:\\")); //replace string with something to read current drive later
+        statusBar.add(status);
+    }
+    
+    //Info for Status Bar, need to convert space into MB/GB
+    private String displayDiskStatus(String diskPath) {
+        File file = new File(diskPath);
+        String status = "Current Drive: " + diskPath +
+                        " Free Space: " + file.getFreeSpace() + 
+                        " Used Space: " + (file.getTotalSpace()-file.getFreeSpace()) +
+                        " Total Space: " + file.getTotalSpace();
+        return status;
+    }
+    
+    //Probably going to return something to Desktop Pane later
+    private void displayDisk(String diskPath) {
+        File file = new File(diskPath);
+        File[] files = file.listFiles();
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        DecimalFormat dFormatter = new DecimalFormat("#,###");
+        
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isDirectory()) {
+                System.out.println("Directory: " + files[i].getAbsolutePath() + 
+                                   " Date: " + formatter.format(files[i].lastModified()) +
+                                   " Size: " + dFormatter.format(files[i].length()));
+            }
+            else System.out.println("File: " + files[i].getAbsolutePath() + 
+                                    " Date: " + formatter.format(files[i].lastModified()) +
+                                    " Size: " + dFormatter.format(files[i].length()));
+        }
+    }
+    
+    private void openFile(String filePath) {
+        Desktop desktop = Desktop.getDesktop();
+        try {
+            desktop.open(new File(filePath));
+        }
+        catch (IOException e) {
+            System.out.println(e.toString());
+        }
+    }
+    
     private class AboutActionListener implements ActionListener {
 
         @Override
@@ -154,5 +212,6 @@ class App extends JFrame {
             else System.out.println("Cancel Button Pressed");
         }
     }
+    
 }
 
