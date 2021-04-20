@@ -151,7 +151,7 @@ class App extends JFrame {
         return status;
     }
     
-    //Probably going to return something to Desktop Pane later
+    //Probably going to return something to File Panel later
     private void displayDisk(String diskPath) {
         File file = new File(diskPath);
         File[] files = file.listFiles();

@@ -1,4 +1,14 @@
 
+import java.awt.Dimension;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTarget;
+import java.awt.dnd.DropTargetDropEvent;
+import java.io.File;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -16,9 +26,43 @@ import javax.swing.JScrollPane;
 public class FilePanel extends JPanel {
     private JScrollPane scrollPane = new JScrollPane();
     private JList fileList = new JList();
+    DefaultListModel model = new DefaultListModel();
     
     public FilePanel() {
+        buildModel();
+        
         scrollPane.setViewportView(fileList);
         this.add(scrollPane);
+        this.setDropTarget(new MyDropTarget());
+        
+    }
+    
+    private void buildModel() {
+        model.addElement("First");
+        model.addElement("Second");
+        model.addElement("Third");
+        fileList.setPreferredSize(new Dimension(600,400));
+        fileList.setModel(model);
+    }
+
+    class MyDropTarget extends DropTarget {
+        public void drop(DropTargetDropEvent event) {
+            try {
+                event.acceptDrop(DnDConstants.ACTION_COPY);
+                List result = new ArrayList();
+                result = (List)event.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                
+                //process the input later(add files to whatever directory you're on)
+                
+                for (Object o: result) {
+                    System.out.println(o.toString());
+                    model.addElement(o.toString());
+                    //Files.copy((File)o, get current directory path;
+                }
+            }
+            catch(Exception e) {
+                
+            }
+        }
     }
 }
