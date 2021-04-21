@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 
 /**
  *
- * @author Eric
+ * @author Eric, Kevin
  */
 public class main {
     

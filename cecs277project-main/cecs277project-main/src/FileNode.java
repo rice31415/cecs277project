@@ -9,7 +9,7 @@ import java.io.File;
 
 /**
  *
- * @author kkubo
+ * @author Eric, Kevin
  */
 class FileNode {
     File file;

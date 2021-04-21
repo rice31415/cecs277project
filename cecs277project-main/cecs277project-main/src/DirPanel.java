@@ -1,5 +1,8 @@
 
+import java.awt.Desktop;
+import java.awt.Dimension;
 import java.io.File;
+import java.io.IOException;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -16,7 +19,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 /**
  *
- * @author Eric
+ * @author Eric, Kevin
  */
 public class DirPanel extends JPanel{
     private JScrollPane scrollPane = new JScrollPane();
@@ -27,26 +30,51 @@ public class DirPanel extends JPanel{
         scrollPane.setViewportView(dirTree);
         this.add(scrollPane);
         buildTree();
+        dirTree.setPreferredSize(new Dimension(400, 4000));
         dirTree.addTreeSelectionListener(new treeSelectionListener());
     }
     
-    //Using C drive; will fix later
+    //Using C drive
+    //TODO: Some file icons not updating when expanding branches
     private void buildTree(){
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("Root");
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("C:\\");
         treeModel = new DefaultTreeModel(root);
-        DefaultMutableTreeNode node = new DefaultMutableTreeNode("Node");
-        root.add(node);
-        File[] paths = File.listRoots();
-        File[] files = paths[0].listFiles();
-        for (int i = 0; i < files.length; i++){
-            if (files[i].isDirectory()){
-                FileNode fileNode = new FileNode("File: " + files[i]);
+        File[] files = new File("C:\\").listFiles();
+        if (files != null){
+            for (int i = 0; i < files.length; i++){
+                FileNode fileNode = new FileNode(files[i].toString());
                 DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(fileNode);
-                node.add(subnode);
+                root.add(subnode);
+                expandBranch(files[i], subnode);
             }
         }
-        
         dirTree.setModel(treeModel);
+    }
+    private void expandBranch(File f, DefaultMutableTreeNode n){
+        if (f.listFiles() != null){
+            File[] files = f.listFiles();
+            for (int i = 0; i < files.length; i++){
+                FileNode fileNode = new FileNode(files[i].toString());
+                DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(fileNode);
+                
+                //Prevents duplicate subnodes from being added
+                if (n.getChildCount() != files.length){
+                    n.add(subnode);
+                    expandSubBranch(files[i], subnode);
+                }
+                
+            }
+        }
+    }
+    private void expandSubBranch(File f, DefaultMutableTreeNode n){
+        if (f.listFiles() != null){
+            File[] files = f.listFiles();
+            for (int i = 0; i < files.length; i++){
+                FileNode fileNode = new FileNode(files[i].toString());
+                DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(fileNode);
+                n.add(subnode);
+            }
+        }
     }
 
     class treeSelectionListener implements TreeSelectionListener {
@@ -56,7 +84,18 @@ public class DirPanel extends JPanel{
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
                     dirTree.getLastSelectedPathComponent();
             FileNode fNode = (FileNode) node.getUserObject();
-            System.out.println(fNode.toString());
+            //System.out.println(fNode.toString());
+            expandBranch(fNode.getFile(), node);
+            
+            Desktop desktop = Desktop.getDesktop();
+            try{
+                if (!fNode.getFile().isDirectory()){
+                    desktop.open(fNode.getFile());
+                }
+            }
+            catch (IOException ex){
+                
+            }
         }
     }
 }

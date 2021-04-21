@@ -10,10 +10,11 @@ import javax.swing.JSplitPane;
 
 /**
  *
- * @author Eric
+ * @author Eric, Kevin
  */
 public class FileManagerFrame extends JInternalFrame{
     JSplitPane splitPane;
+    
     public FileManagerFrame() {
         this.setTitle("C:\\"); //get current file path later
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new DirPanel(), new FilePanel());
@@ -21,7 +22,7 @@ public class FileManagerFrame extends JInternalFrame{
         this.setClosable(true);
         this.setMaximizable(true);
         this.setIconifiable(true);
-        this.setSize(500,500);
+        this.setSize(900, 900);
         this.setVisible(true);
     }
 }

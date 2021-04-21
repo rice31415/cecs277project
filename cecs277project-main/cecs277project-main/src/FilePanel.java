@@ -21,7 +21,7 @@ import javax.swing.JScrollPane;
 
 /**
  *
- * @author Eric
+ * @author Eric, Kevin
  */
 public class FilePanel extends JPanel {
     private JScrollPane scrollPane = new JScrollPane();
@@ -41,7 +41,7 @@ public class FilePanel extends JPanel {
         model.addElement("First");
         model.addElement("Second");
         model.addElement("Third");
-        fileList.setPreferredSize(new Dimension(600,400));
+        fileList.setPreferredSize(new Dimension(400, 4000));
         fileList.setModel(model);
     }
 

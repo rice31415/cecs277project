@@ -25,7 +25,7 @@ import javax.swing.JToolBar;
 
 /**
  *
- * @author Eric
+ * @author Eric, Kevin
  */
 class App extends JFrame {
     
@@ -62,7 +62,7 @@ class App extends JFrame {
         mainPanel.add(statusBar, BorderLayout.SOUTH);
         
         this.add(mainPanel);
-        this.setSize(750, 750);
+        this.setSize(1000, 1000);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
