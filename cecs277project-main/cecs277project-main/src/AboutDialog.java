@@ -6,7 +6,7 @@
 
 /**
  *
- * @author Eric
+ * @author Eric, Kevin
  */
 public class AboutDialog extends javax.swing.JDialog {
 

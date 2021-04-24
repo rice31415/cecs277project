@@ -32,6 +32,8 @@ public class FilePanel extends JPanel {
         buildModel();
         
         scrollPane.setViewportView(fileList);
+        scrollPane.setPreferredSize(new Dimension(400, 4000));
+        fileList.setPreferredSize(scrollPane.getSize());
         this.add(scrollPane);
         this.setDropTarget(new MyDropTarget());
         

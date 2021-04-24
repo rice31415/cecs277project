@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,6 +34,7 @@ class App extends JFrame {
     JButton button;
     JDesktopPane desktopPane;
     JMenuBar menuBar, statusBar;
+    JToolBar toolBar;
     
     public App() {
         mainPanel = new JPanel();
@@ -41,6 +43,7 @@ class App extends JFrame {
         desktopPane = new JDesktopPane();
         menuBar = new JMenuBar();
         statusBar = new JMenuBar();
+        toolBar = new JToolBar();
         
         mainPanel.setLayout(new BorderLayout());
         topPanel.setLayout(new BorderLayout());
@@ -51,8 +54,10 @@ class App extends JFrame {
         
         buildMenu();
         buildStatusBar();
+        buildToolBar();
         
         topPanel.add(menuBar, BorderLayout.NORTH);
+        topPanel.add(toolBar, BorderLayout.SOUTH);
         
         FileManagerFrame fileManFrame = new FileManagerFrame();
         desktopPane.add(fileManFrame);
@@ -139,6 +144,15 @@ class App extends JFrame {
     private void buildStatusBar() {
         JLabel status = new JLabel(displayDiskStatus("C:\\")); //replace string with something to read current drive later
         statusBar.add(status);
+    }
+    
+    private void buildToolBar() {
+        File[] paths;
+        paths = File.listRoots();
+        JComboBox drives = new JComboBox(paths);
+        toolBar.add(drives);
+        toolBar.add(button);
+        //next step I think is to add an action listener, not sure if it will be a seperate one
     }
     
     //Info for Status Bar, need to convert space into MB/GB
