@@ -1,6 +1,8 @@
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -31,15 +33,17 @@ import javax.swing.JToolBar;
 class App extends JFrame {
     
     JPanel mainPanel, topPanel;
-    JButton button;
+    JButton dButton, sButton;
     JDesktopPane desktopPane;
     JMenuBar menuBar, statusBar;
     JToolBar toolBar;
+    JComboBox drives;
     
     public App() {
         mainPanel = new JPanel();
         topPanel = new JPanel();
-        button = new JButton("Button");
+        dButton = new JButton("Details");
+        sButton = new JButton("Simple");
         desktopPane = new JDesktopPane();
         menuBar = new JMenuBar();
         statusBar = new JMenuBar();
@@ -59,7 +63,7 @@ class App extends JFrame {
         topPanel.add(menuBar, BorderLayout.NORTH);
         topPanel.add(toolBar, BorderLayout.SOUTH);
         
-        FileManagerFrame fileManFrame = new FileManagerFrame();
+        FileManagerFrame fileManFrame = new FileManagerFrame(new File("C:\\"));
         desktopPane.add(fileManFrame);
         
         mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -149,9 +153,14 @@ class App extends JFrame {
     private void buildToolBar() {
         File[] paths;
         paths = File.listRoots();
-        JComboBox drives = new JComboBox(paths);
+        drives = new JComboBox(paths);
+        drives.setMaximumSize(new Dimension(100, 50));
+        drives.addActionListener(new MainActionListener());
         toolBar.add(drives);
-        toolBar.add(button);
+        toolBar.add(dButton);
+        toolBar.add(sButton);
+        toolBar.setMargin(new Insets(5, 5, 5, 5));
+        toolBar.setFloatable(false);
         //next step I think is to add an action listener, not sure if it will be a seperate one
     }
     
@@ -159,9 +168,9 @@ class App extends JFrame {
     private String displayDiskStatus(String diskPath) {
         File file = new File(diskPath);
         String status = "Current Drive: " + diskPath +
-                        " Free Space: " + file.getFreeSpace() + 
-                        " Used Space: " + (file.getTotalSpace()-file.getFreeSpace()) +
-                        " Total Space: " + file.getTotalSpace();
+                        "    Free Space: " + (int)(file.getFreeSpace()/(Math.pow(10,9))) + 
+                        "GB    Used Space: " + (int)((file.getTotalSpace()-file.getFreeSpace())/(Math.pow(10,9))) +
+                        "GB    Total Space: " + (int)(file.getTotalSpace()/(Math.pow(10, 9))) + "GB";
         return status;
     }
     
@@ -208,13 +217,15 @@ class App extends JFrame {
             else if (e.getActionCommand().equals("OK")){
                 System.out.println("OK Button Pressed");
             }
-            else if (e.getActionCommand().equals("New")){
-                desktopPane.add(new FileManagerFrame());
+            else if (e.getActionCommand().equals("New") ||
+                    e.getActionCommand().equals("comboBoxChanged")){
+                desktopPane.add(new FileManagerFrame((File)drives.getSelectedItem()));
             }
             else {
                 System.out.println("Cancel Button Pressed");
             }
         }
     }
+    
 }
 

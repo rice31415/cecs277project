@@ -26,10 +26,10 @@ public class DirPanel extends JPanel{
     private JTree dirTree = new JTree();
     private DefaultTreeModel treeModel;
     
-    public DirPanel() {
+    public DirPanel(File file) {
         scrollPane.setViewportView(dirTree);
         this.add(scrollPane);
-        buildTree();
+        buildTree(file);
         //dirTree.setPreferredSize(new Dimension(400, 4000));
         scrollPane.setPreferredSize(new Dimension(400, 4000)); //will fit to window, change to setSize to override
         dirTree.setPreferredSize(scrollPane.getSize());
@@ -40,10 +40,10 @@ public class DirPanel extends JPanel{
     
     //Using C drive
     //TODO: Some file icons not updating when expanding branches
-    private void buildTree(){
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("C:\\");
+    private void buildTree(File file){
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(file.toString());
         treeModel = new DefaultTreeModel(root);
-        File[] files = new File("C:\\").listFiles();
+        File[] files = file.listFiles();
         if (files != null){
             for (int i = 0; i < files.length; i++){
                 FileNode fileNode = new FileNode(files[i].toString());

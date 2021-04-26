@@ -1,5 +1,6 @@
 
 import java.awt.Dimension;
+import java.io.File;
 import javax.swing.JInternalFrame;
 import javax.swing.JSplitPane;
 
@@ -18,11 +19,11 @@ public class FileManagerFrame extends JInternalFrame{
     DirPanel dirPanel;
     FilePanel filePanel;
     
-    public FileManagerFrame() {
-        dirPanel = new DirPanel();
+    public FileManagerFrame(File file) {
+        dirPanel = new DirPanel(file);
         filePanel = new FilePanel();
         
-        this.setTitle("C:\\"); //get current file path later
+        this.setTitle(file.toString()); //get current file path later
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, dirPanel, filePanel);
         
         setMinimumSize();
