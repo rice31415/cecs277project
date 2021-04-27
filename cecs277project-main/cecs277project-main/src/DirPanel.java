@@ -1,4 +1,5 @@
 
+import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.io.File;
@@ -28,9 +29,9 @@ public class DirPanel extends JPanel{
     
     public DirPanel(File file) {
         scrollPane.setViewportView(dirTree);
-        this.add(scrollPane);
+        this.setLayout(new BorderLayout());
+        this.add(scrollPane, BorderLayout.CENTER);
         buildTree(file);
-        //dirTree.setPreferredSize(new Dimension(400, 4000));
         scrollPane.setPreferredSize(new Dimension(400, 4000)); //will fit to window, change to setSize to override
         dirTree.setPreferredSize(scrollPane.getSize());
         //To dynamically edit the size, I think we're supposed to run ^ line whenever mouse released

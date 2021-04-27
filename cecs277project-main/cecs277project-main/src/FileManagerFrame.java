@@ -21,9 +21,8 @@ public class FileManagerFrame extends JInternalFrame{
     
     public FileManagerFrame(File file) {
         dirPanel = new DirPanel(file);
-        filePanel = new FilePanel();
-        
-        this.setTitle(file.toString()); //get current file path later
+        filePanel = new FilePanel(file); //might have to take in different file parameter
+        this.setTitle(file.toString()); 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, dirPanel, filePanel);
         
         setMinimumSize();

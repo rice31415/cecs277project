@@ -1,4 +1,5 @@
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
@@ -28,10 +29,12 @@ public class FilePanel extends JPanel {
     private JList fileList = new JList();
     DefaultListModel model = new DefaultListModel();
     
-    public FilePanel() {
-        buildModel();
+    public FilePanel(File file) {
+        buildModel(file);
         
         scrollPane.setViewportView(fileList);
+        this.setLayout(new BorderLayout());
+        this.add(scrollPane, BorderLayout.CENTER);
         scrollPane.setPreferredSize(new Dimension(400, 4000));
         fileList.setPreferredSize(scrollPane.getSize());
         this.add(scrollPane);
@@ -39,10 +42,14 @@ public class FilePanel extends JPanel {
         
     }
     
-    private void buildModel() {
-        model.addElement("First");
-        model.addElement("Second");
-        model.addElement("Third");
+    private void buildModel(File file) {
+        File[] files = file.listFiles();
+        if (files != null){
+            for (int i = 0; i < files.length; i++){
+                FileNode fileNode = new FileNode(files[i].toString());
+                model.addElement(fileNode);
+            }
+        }
         fileList.setPreferredSize(new Dimension(400, 4000));
         fileList.setModel(model);
     }

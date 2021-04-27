@@ -2,6 +2,7 @@
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -156,12 +157,13 @@ class App extends JFrame {
         drives = new JComboBox(paths);
         drives.setMaximumSize(new Dimension(100, 50));
         drives.addActionListener(new MainActionListener());
+        toolBar.setLayout(new FlowLayout(FlowLayout.CENTER));
         toolBar.add(drives);
         toolBar.add(dButton);
         toolBar.add(sButton);
         toolBar.setMargin(new Insets(5, 5, 5, 5));
         toolBar.setFloatable(false);
-        //next step I think is to add an action listener, not sure if it will be a seperate one
+        
     }
     
     //Info for Status Bar, need to convert space into MB/GB
