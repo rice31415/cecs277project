@@ -33,12 +33,15 @@ public class FilePanel extends JPanel {
         buildModel(file);
         
         scrollPane.setViewportView(fileList);
+        
         this.setLayout(new BorderLayout());
         this.add(scrollPane, BorderLayout.CENTER);
-        scrollPane.setPreferredSize(new Dimension(400, 4000));
-        fileList.setPreferredSize(scrollPane.getSize());
+        scrollPane.setSize(new Dimension(400, 4000));
+        fileList.setSize(scrollPane.getSize());
+        
         this.add(scrollPane);
         this.setDropTarget(new MyDropTarget());
+        
         
     }
     
@@ -50,7 +53,7 @@ public class FilePanel extends JPanel {
                 model.addElement(fileNode);
             }
         }
-        fileList.setPreferredSize(new Dimension(400, 4000));
+        fileList.setDragEnabled(true);
         fileList.setModel(model);
     }
 
@@ -59,18 +62,24 @@ public class FilePanel extends JPanel {
             try {
                 event.acceptDrop(DnDConstants.ACTION_COPY);
                 List result = new ArrayList();
-                result = (List)event.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                
-                //process the input later(add files to whatever directory you're on)
-                
-                for (Object o: result) {
-                    System.out.println(o.toString());
-                    model.addElement(o.toString());
-                    //Files.copy((File)o, get current directory path;
+                if(event.getTransferable().isDataFlavorSupported(DataFlavor.stringFlavor)){     
+                    String temp = (String)event.getTransferable().getTransferData(DataFlavor.stringFlavor);
+                    String[] next = temp.split("\\n");
+                    for(int i=0; i<next.length;i++)
+                        model.addElement(next[i]); 
+                }
+                else{ 
+                    result =(List)event.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                    //process input
+                    for (Object o: result) {
+                        System.out.println(o.toString());
+                        model.addElement(o.toString());
+                        //Files.copy((File)o, get current directory path;
+                    }
                 }
             }
             catch(Exception e) {
-                
+                e.printStackTrace();
             }
         }
     }

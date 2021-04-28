@@ -32,8 +32,8 @@ public class DirPanel extends JPanel{
         this.setLayout(new BorderLayout());
         this.add(scrollPane, BorderLayout.CENTER);
         buildTree(file);
-        scrollPane.setPreferredSize(new Dimension(400, 4000)); //will fit to window, change to setSize to override
-        dirTree.setPreferredSize(scrollPane.getSize());
+        scrollPane.setSize(new Dimension(400, 4000));
+        dirTree.setSize(scrollPane.getSize());
         //To dynamically edit the size, I think we're supposed to run ^ line whenever mouse released
         //I'll wait to see if Hoffman will go over mouse listeners
         dirTree.addTreeSelectionListener(new treeSelectionListener());
