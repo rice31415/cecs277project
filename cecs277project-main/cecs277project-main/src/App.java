@@ -39,6 +39,7 @@ class App extends JFrame {
     JMenuBar menuBar, statusBar;
     JToolBar toolBar;
     JComboBox drives;
+    File currentDrive;
     
     public App() {
         mainPanel = new JPanel();
@@ -49,6 +50,7 @@ class App extends JFrame {
         menuBar = new JMenuBar();
         statusBar = new JMenuBar();
         toolBar = new JToolBar();
+        currentDrive = new File("C:\\");
         
         mainPanel.setLayout(new BorderLayout());
         topPanel.setLayout(new BorderLayout());
@@ -94,6 +96,9 @@ class App extends JFrame {
         JMenuItem run = new JMenuItem("Run"); 
         JMenuItem exit = new JMenuItem("Exit");
         
+        rename.addActionListener(new MainActionListener());
+        copy.addActionListener(new MainActionListener());
+        delete.addActionListener(new MainActionListener());
         exit.addActionListener(new MainActionListener());
         
         fileMenu.add(rename);
@@ -147,7 +152,7 @@ class App extends JFrame {
     }
     
     private void buildStatusBar() {
-        JLabel status = new JLabel(displayDiskStatus("C:\\")); //replace string with something to read current drive later
+        JLabel status = new JLabel(displayDiskStatus(currentDrive));
         statusBar.add(status);
     }
     
@@ -167,12 +172,11 @@ class App extends JFrame {
     }
     
     //Info for Status Bar, need to convert space into MB/GB
-    private String displayDiskStatus(String diskPath) {
-        File file = new File(diskPath);
+    private String displayDiskStatus(File diskPath) {
         String status = "Current Drive: " + diskPath +
-                        "    Free Space: " + (int)(file.getFreeSpace()/(Math.pow(10,9))) + 
-                        "GB    Used Space: " + (int)((file.getTotalSpace()-file.getFreeSpace())/(Math.pow(10,9))) +
-                        "GB    Total Space: " + (int)(file.getTotalSpace()/(Math.pow(10, 9))) + "GB";
+                        "    Free Space: " + (int)(diskPath.getFreeSpace()/(Math.pow(10,9))) + 
+                        "GB    Used Space: " + (int)((diskPath.getTotalSpace()-diskPath.getFreeSpace())/(Math.pow(10,9))) +
+                        "GB    Total Space: " + (int)(diskPath.getTotalSpace()/(Math.pow(10, 9))) + "GB";
         return status;
     }
     
@@ -219,9 +223,35 @@ class App extends JFrame {
             else if (e.getActionCommand().equals("OK")){
                 System.out.println("OK Button Pressed");
             }
-            else if (e.getActionCommand().equals("New") ||
-                    e.getActionCommand().equals("comboBoxChanged")){
-                desktopPane.add(new FileManagerFrame((File)drives.getSelectedItem()));
+            else if (e.getActionCommand().equals("New")){
+                desktopPane.add(new FileManagerFrame(currentDrive));
+            }
+            //When a new drive is selected in drive list:
+            else if (e.getActionCommand().equals("comboBoxChanged")){
+                currentDrive = (File)drives.getSelectedItem();
+                statusBar.removeAll();
+                statusBar.add(new JLabel(displayDiskStatus(currentDrive)));
+            }
+            else if (e.getActionCommand().equals("Copy")){
+                CopyDialog copyDlg = new CopyDialog(null, true);
+                copyDlg.setDirectoryLabel(currentDrive.toString());
+                copyDlg.setFromField("File name goes here");
+                copyDlg.setVisible(true);
+                String toField = copyDlg.getToField();
+                System.out.println("toField: " + toField);
+            }
+            else if (e.getActionCommand().equals("Rename")){
+                RenameDialog renameDlg = new RenameDialog(null, true);
+                renameDlg.setDirectoryLabel(currentDrive.toString());
+                renameDlg.setFromField("File name goes here");
+                renameDlg.setVisible(true);
+                String toField = renameDlg.getToField();
+                System.out.println("toField: " + toField);
+            }
+            else if (e.getActionCommand().equals("Delete")){
+                DeleteDialog deleteDlg = new DeleteDialog(null, true);
+                deleteDlg.setDeleteLabel(currentDrive.toString());
+                deleteDlg.setVisible(true);
             }
             else {
                 System.out.println("Cancel Button Pressed");
