@@ -32,7 +32,7 @@ class FileNode {
         if (file.getName().equals("")){
             return file.getPath();
         }
-        return file.getName();
+        return file.getAbsolutePath();
     }
     
     public boolean isDirectory(){

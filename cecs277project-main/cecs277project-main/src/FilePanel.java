@@ -76,6 +76,17 @@ public class FilePanel extends JPanel {
         MouseListener popupListener = new PopupListener();
         fileList.addMouseListener(popupListener);
     }
+    
+    public void fillList(File dir) {
+        File[] files;
+        files = dir.listFiles();
+        model.clear();
+        fileList.removeAll();
+        for(int i = 0; i < files.length; i++) {
+            model.addElement(files[i].getAbsolutePath());
+        }
+        fileList.setModel(model);
+    }
 
     class MyDropTarget extends DropTarget {
         public void drop(DropTargetDropEvent event) {

@@ -26,6 +26,7 @@ public class DirPanel extends JPanel{
     private JScrollPane scrollPane = new JScrollPane();
     private JTree dirTree = new JTree();
     private DefaultTreeModel treeModel;
+    private FilePanel filePanel;
     
     public DirPanel(File file) {
         scrollPane.setViewportView(dirTree);
@@ -81,6 +82,10 @@ public class DirPanel extends JPanel{
             }
         }
     }
+    
+    public void setFilePanel(FilePanel fp) {
+        filePanel = fp;
+    }
 
     class treeSelectionListener implements TreeSelectionListener {
 
@@ -97,6 +102,7 @@ public class DirPanel extends JPanel{
                 if (!fNode.getFile().isDirectory()){
                     desktop.open(fNode.getFile());
                 }
+                else filePanel.fillList(new File(fNode.toString()));
             }
             catch (IOException ex){
                 
