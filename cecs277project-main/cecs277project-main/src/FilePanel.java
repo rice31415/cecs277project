@@ -5,6 +5,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
 import java.awt.dnd.DropTargetDropEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -34,10 +36,12 @@ public class FilePanel extends JPanel {
     private JList fileList = new JList();
     DefaultListModel model = new DefaultListModel();
     private JPopupMenu popup = new JPopupMenu();
+    File currentDrive;
     
     public FilePanel(File file) {
         buildModel(file);
         buildPopup();
+        currentDrive = file;
         
         scrollPane.setViewportView(fileList);
         
@@ -68,6 +72,10 @@ public class FilePanel extends JPanel {
         JMenuItem copy = new JMenuItem("Copy");
         JMenuItem rename = new JMenuItem("Rename");
         JMenuItem delete = new JMenuItem("Delete");
+        
+        copy.addActionListener(new MainActionListener());
+        rename.addActionListener(new MainActionListener());
+        delete.addActionListener(new MainActionListener());
         
         popup.add(copy);
         popup.add(rename);
@@ -128,6 +136,36 @@ public class FilePanel extends JPanel {
             if (e.isPopupTrigger()) {
                 popup.show(e.getComponent(),
                            e.getX(), e.getY());
+            }
+        }
+        private void getLastPopupMouseEvent(MouseEvent e){
+            System.out.println("Testing");
+        }
+    }
+    
+    private class MainActionListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getActionCommand().equals("Copy")){
+                CopyDialog copyDlg = new CopyDialog(null, true);
+                copyDlg.setDirectoryLabel(currentDrive.toString());
+                copyDlg.setFromField("File name goes here");
+                copyDlg.setVisible(true);
+                String toField = copyDlg.getToField();
+                System.out.println("toField: " + toField);
+            }
+            else if (e.getActionCommand().equals("Rename")){
+                RenameDialog renameDlg = new RenameDialog(null, true);
+                renameDlg.setDirectoryLabel(currentDrive.toString());
+                renameDlg.setFromField("File name goes here");
+                renameDlg.setVisible(true);
+                String toField = renameDlg.getToField();
+                System.out.println("toField: " + toField);
+            }
+            else if (e.getActionCommand().equals("Delete")){
+                DeleteDialog deleteDlg = new DeleteDialog(null, true);
+                deleteDlg.setDeleteLabel(currentDrive.toString());
+                deleteDlg.setVisible(true);
             }
         }
     }

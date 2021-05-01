@@ -40,45 +40,30 @@ public class DirPanel extends JPanel{
         dirTree.addTreeSelectionListener(new treeSelectionListener());
     }
     
-    //Using C drive
     //TODO: Some file icons not updating when expanding branches
-    private void buildTree(File file){
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode(file.toString());
+    private void buildTree(File rootFile){
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootFile.toString());
         treeModel = new DefaultTreeModel(root);
-        File[] files = file.listFiles();
-        if (files != null){
-            for (int i = 0; i < files.length; i++){
-                FileNode fileNode = new FileNode(files[i].toString());
-                DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(fileNode);
+        DefaultMutableTreeNode subnode = null;
+        File[] dirs = rootFile.listFiles();
+        for (int i = 0; i < dirs.length; i++){
+            if (dirs[i].isDirectory()){
+                subnode = new DefaultMutableTreeNode(dirs[i].getName());
                 root.add(subnode);
-                expandBranch(files[i], subnode);
+                expandBranch(dirs[i], subnode);
             }
         }
         dirTree.setModel(treeModel);
     }
-    private void expandBranch(File f, DefaultMutableTreeNode n){
-        if (f.listFiles() != null){
-            File[] files = f.listFiles();
-            for (int i = 0; i < files.length; i++){
-                FileNode fileNode = new FileNode(files[i].toString());
-                DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(fileNode);
-                
-                //Prevents duplicate subnodes from being added
-                if (n.getChildCount() != files.length){
-                    n.add(subnode);
-                    expandSubBranch(files[i], subnode);
-                }
-                
-            }
-        }
-    }
-    private void expandSubBranch(File f, DefaultMutableTreeNode n){
-        if (f.listFiles() != null){
-            File[] files = f.listFiles();
-            for (int i = 0; i < files.length; i++){
-                FileNode fileNode = new FileNode(files[i].toString());
-                DefaultMutableTreeNode subnode = new DefaultMutableTreeNode(fileNode);
-                n.add(subnode);
+    
+    private void expandBranch(File file, DefaultMutableTreeNode node){
+        File[] subFiles = file.listFiles();
+        DefaultMutableTreeNode subnode = null;
+        if (subFiles != null){
+            for (int i = 0; i < subFiles.length; i++){
+                FileNode fileNode = new FileNode(subFiles[i].toString());
+                subnode = new DefaultMutableTreeNode(fileNode);
+                node.add(subnode);
             }
         }
     }
