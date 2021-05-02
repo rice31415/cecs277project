@@ -1,5 +1,6 @@
 
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
@@ -11,7 +12,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultListModel;
@@ -20,6 +24,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -49,6 +55,7 @@ public class FilePanel extends JPanel {
         this.add(scrollPane, BorderLayout.CENTER);
         scrollPane.setSize(new Dimension(400, 4000));
         fileList.setSize(scrollPane.getSize());
+        fileList.addListSelectionListener(new fileSelectionListener());
         
         this.add(scrollPane);
         this.setDropTarget(new MyDropTarget());
@@ -60,7 +67,7 @@ public class FilePanel extends JPanel {
         File[] files = file.listFiles();
         if (files != null){
             for (int i = 0; i < files.length; i++){
-                FileNode fileNode = new FileNode(files[i].toString());
+                FileNode fileNode = new FileNode(files[i].toString(), files[i]);
                 model.addElement(fileNode);
             }
         }
@@ -91,9 +98,19 @@ public class FilePanel extends JPanel {
         model.clear();
         fileList.removeAll();
         for(int i = 0; i < files.length; i++) {
-            model.addElement(files[i].getAbsolutePath());
+            FileNode fileNode = new FileNode(files[i].toString(), files[i]);
+            model.addElement(fileNode);
         }
         fileList.setModel(model);
+    }
+    
+    private String displayDetail(File file) {
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        DecimalFormat dFormatter = new DecimalFormat("#,###");
+        
+        return file.getAbsolutePath() + 
+               formatter.format(file.lastModified()) +
+               dFormatter.format(file.length());
     }
 
     class MyDropTarget extends DropTarget {
@@ -104,8 +121,9 @@ public class FilePanel extends JPanel {
                 if(event.getTransferable().isDataFlavorSupported(DataFlavor.stringFlavor)){     
                     String temp = (String)event.getTransferable().getTransferData(DataFlavor.stringFlavor);
                     String[] next = temp.split("\\n");
-                    for(int i=0; i<next.length;i++)
+                    for(int i=0; i<next.length;i++) {
                         model.addElement(next[i]); 
+                    }
                 }
                 else{ 
                     result =(List)event.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
@@ -167,6 +185,25 @@ public class FilePanel extends JPanel {
                 deleteDlg.setDeleteLabel(currentDrive.toString());
                 deleteDlg.setVisible(true);
             }
+        }
+    }
+    private class fileSelectionListener implements ListSelectionListener {
+
+        @Override
+        public void valueChanged(ListSelectionEvent evt) {
+            if (!evt.getValueIsAdjusting()) {
+                File file = (File)fileList.getSelectedValue();
+                Desktop desktop = Desktop.getDesktop();
+                try{
+                    if (!file.isDirectory()){
+                        desktop.open(file);
+                    }
+                }
+                catch (IOException ex){
+                    
+                }
+            }
+            
         }
     }
 }
