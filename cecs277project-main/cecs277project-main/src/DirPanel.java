@@ -87,7 +87,7 @@ public class DirPanel extends JPanel{
                 if (!fNode.getFile().isDirectory()){
                     desktop.open(fNode.getFile());
                 }
-                else filePanel.fillList(new File(fNode.toString()));
+                else filePanel.fillList(new File(fNode.getFile().getName()));
             }
             catch (IOException ex){
                 

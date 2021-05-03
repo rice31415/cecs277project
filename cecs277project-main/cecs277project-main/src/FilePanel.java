@@ -104,15 +104,14 @@ public class FilePanel extends JPanel {
         fileList.setModel(model);
     }
     
-    private String displayDetail(File file) {
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        DecimalFormat dFormatter = new DecimalFormat("#,###");
-        
-        return file.getAbsolutePath() + 
-               formatter.format(file.lastModified()) +
-               dFormatter.format(file.length());
+    public void setDetail(boolean d) {
+        for (int i = 0; i < model.getSize(); i++) {
+            FileNode fileNode = (FileNode)model.getElementAt(i);
+            fileNode.setDetail(d);
+        }
+        scrollPane.repaint();
     }
-
+    
     class MyDropTarget extends DropTarget {
         public void drop(DropTargetDropEvent event) {
             try {
@@ -192,7 +191,8 @@ public class FilePanel extends JPanel {
         @Override
         public void valueChanged(ListSelectionEvent evt) {
             if (!evt.getValueIsAdjusting()) {
-                File file = (File)fileList.getSelectedValue();
+                FileNode fileNode = (FileNode)fileList.getSelectedValue();
+                File file = fileNode.getFile();
                 Desktop desktop = Desktop.getDesktop();
                 try{
                     if (!file.isDirectory()){

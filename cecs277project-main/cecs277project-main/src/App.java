@@ -168,6 +168,8 @@ class App extends JFrame {
         toolBar.add(sButton);
         toolBar.setMargin(new Insets(5, 5, 5, 5));
         toolBar.setFloatable(false);
+        dButton.addActionListener(new MainActionListener());
+        sButton.addActionListener(new MainActionListener());
         
     }
     
@@ -251,6 +253,22 @@ class App extends JFrame {
                 DeleteDialog deleteDlg = new DeleteDialog(null, true);
                 deleteDlg.setDeleteLabel(currentDrive.toString());
                 deleteDlg.setVisible(true);
+            }
+            else if(e.getActionCommand().equals("Details")) {
+                FileManagerFrame active = (FileManagerFrame)desktopPane.getSelectedFrame();
+                if (active == null) {
+                    return;
+                }
+                FilePanel fp = active.filePanel;
+                fp.setDetail(true);
+            }
+            else if(e.getActionCommand().equals("Simple")) {
+                FileManagerFrame active = (FileManagerFrame)desktopPane.getSelectedFrame();
+                if (active == null) {
+                    return;
+                }
+                FilePanel fp = active.filePanel;
+                fp.setDetail(false);
             }
             else {
                 System.out.println("Cancel Button Pressed");
