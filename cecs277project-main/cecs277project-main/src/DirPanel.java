@@ -35,8 +35,6 @@ public class DirPanel extends JPanel{
         buildTree(file);
         scrollPane.setSize(new Dimension(400, 4000));
         dirTree.setSize(scrollPane.getSize());
-        //To dynamically edit the size, I think we're supposed to run ^ line whenever mouse released
-        //I'll wait to see if Hoffman will go over mouse listeners
         dirTree.addTreeSelectionListener(new treeSelectionListener());
     }
     
@@ -48,7 +46,8 @@ public class DirPanel extends JPanel{
         File[] dirs = rootFile.listFiles();
         for (int i = 0; i < dirs.length; i++){
             if (dirs[i].isDirectory()){
-                subnode = new DefaultMutableTreeNode(dirs[i].getName());
+                FileNode fNode = new FileNode(dirs[i].getName(), dirs[i]);
+                subnode = new DefaultMutableTreeNode(fNode);
                 root.add(subnode);
                 expandBranch(dirs[i], subnode);
             }
@@ -82,7 +81,6 @@ public class DirPanel extends JPanel{
                 FileNode fNode = (FileNode) node.getUserObject();
                 //System.out.println(fNode.toString());
                 expandBranch(fNode.getFile(), node);
-            
                 Desktop desktop = Desktop.getDesktop();
                 try{
                     if (!fNode.getFile().isDirectory()){
@@ -95,9 +93,11 @@ public class DirPanel extends JPanel{
                     }
                 }
                 catch (IOException ex){
+                    System.out.println(ex.toString());
                 }
             }
             catch(java.lang.ClassCastException ex){
+                System.out.println(ex.toString());
             }
         }
     }
