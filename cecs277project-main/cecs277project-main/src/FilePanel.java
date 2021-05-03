@@ -42,12 +42,12 @@ public class FilePanel extends JPanel {
     private JList fileList = new JList();
     DefaultListModel model = new DefaultListModel();
     private JPopupMenu popup = new JPopupMenu();
-    File currentDrive;
+    private File currentFile;
     
     public FilePanel(File file) {
         buildModel(file);
         buildPopup();
-        currentDrive = file;
+        currentFile = file;
         
         scrollPane.setViewportView(fileList);
         
@@ -112,6 +112,14 @@ public class FilePanel extends JPanel {
         scrollPane.repaint();
     }
     
+    public void setCurrentFile(File file){
+        currentFile = file;
+    }
+    
+    public File getCurrentFile(){
+        return currentFile;
+    }
+    
     class MyDropTarget extends DropTarget {
         public void drop(DropTargetDropEvent event) {
             try {
@@ -165,24 +173,31 @@ public class FilePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals("Copy")){
                 CopyDialog copyDlg = new CopyDialog(null, true);
-                copyDlg.setDirectoryLabel(currentDrive.toString());
-                copyDlg.setFromField("File name goes here");
+                copyDlg.setDirectoryLabel(currentFile.toString());
+                copyDlg.setFromField(currentFile.toString());
                 copyDlg.setVisible(true);
-                String toField = copyDlg.getToField();
-                System.out.println("toField: " + toField);
+                if (!copyDlg.canceled){
+                    String toField = copyDlg.getToField();
+                    System.out.println("toField: " + toField);
+                }
             }
             else if (e.getActionCommand().equals("Rename")){
                 RenameDialog renameDlg = new RenameDialog(null, true);
-                renameDlg.setDirectoryLabel(currentDrive.toString());
-                renameDlg.setFromField("File name goes here");
+                renameDlg.setDirectoryLabel(currentFile.toString());
+                renameDlg.setFromField(currentFile.toString());
                 renameDlg.setVisible(true);
-                String toField = renameDlg.getToField();
-                System.out.println("toField: " + toField);
+                if (!renameDlg.canceled){
+                    String toField = renameDlg.getToField();
+                    System.out.println("toField: " + toField);
+                }
             }
             else if (e.getActionCommand().equals("Delete")){
                 DeleteDialog deleteDlg = new DeleteDialog(null, true);
-                deleteDlg.setDeleteLabel(currentDrive.toString());
+                deleteDlg.setDeleteLabel(currentFile.toString());
                 deleteDlg.setVisible(true);
+                if (!deleteDlg.canceled){
+                    System.out.println("Deleting file");
+                }
             }
         }
     }
@@ -196,6 +211,7 @@ public class FilePanel extends JPanel {
                 Desktop desktop = Desktop.getDesktop();
                 try{
                     if (!file.isDirectory()){
+                        currentFile = file;
                         desktop.open(file);
                     }
                 }

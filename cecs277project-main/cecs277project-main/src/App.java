@@ -234,25 +234,50 @@ class App extends JFrame {
                 statusBar.add(new JLabel(displayDiskStatus(currentDrive)));
             }
             else if (e.getActionCommand().equals("Copy")){
+                FileManagerFrame active = (FileManagerFrame)desktopPane.getSelectedFrame();
+                if (active == null) {
+                    return;
+                }
+                FilePanel fp = active.filePanel;
+                
                 CopyDialog copyDlg = new CopyDialog(null, true);
-                copyDlg.setDirectoryLabel(currentDrive.toString());
-                copyDlg.setFromField("File name goes here");
+                copyDlg.setDirectoryLabel(fp.getCurrentFile().toString());
+                copyDlg.setFromField(fp.getCurrentFile().toString());
                 copyDlg.setVisible(true);
-                String toField = copyDlg.getToField();
-                System.out.println("toField: " + toField);
+                if (!copyDlg.canceled){
+                    String toField = copyDlg.getToField();
+                    System.out.println("toField: " + toField);
+                }
             }
             else if (e.getActionCommand().equals("Rename")){
+                FileManagerFrame active = (FileManagerFrame)desktopPane.getSelectedFrame();
+                if (active == null) {
+                    return;
+                }
+                FilePanel fp = active.filePanel;
+                
                 RenameDialog renameDlg = new RenameDialog(null, true);
-                renameDlg.setDirectoryLabel(currentDrive.toString());
-                renameDlg.setFromField("File name goes here");
+                renameDlg.setDirectoryLabel(fp.getCurrentFile().toString());
+                renameDlg.setFromField(fp.getCurrentFile().toString());
                 renameDlg.setVisible(true);
-                String toField = renameDlg.getToField();
-                System.out.println("toField: " + toField);
+                if (!renameDlg.canceled){
+                    String toField = renameDlg.getToField();
+                    System.out.println("toField: " + toField);
+                }
             }
             else if (e.getActionCommand().equals("Delete")){
+                FileManagerFrame active = (FileManagerFrame)desktopPane.getSelectedFrame();
+                if (active == null) {
+                    return;
+                }
+                FilePanel fp = active.filePanel;
+                
                 DeleteDialog deleteDlg = new DeleteDialog(null, true);
-                deleteDlg.setDeleteLabel(currentDrive.toString());
+                deleteDlg.setDeleteLabel(fp.getCurrentFile().toString());
                 deleteDlg.setVisible(true);
+                if (!deleteDlg.canceled){
+                    System.out.println("Deleting file");
+                }
             }
             else if(e.getActionCommand().equals("Details")) {
                 FileManagerFrame active = (FileManagerFrame)desktopPane.getSelectedFrame();

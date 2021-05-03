@@ -78,19 +78,26 @@ public class DirPanel extends JPanel{
         public void valueChanged(TreeSelectionEvent e) {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) 
                     dirTree.getLastSelectedPathComponent();
-            FileNode fNode = (FileNode) node.getUserObject();
-            //System.out.println(fNode.toString());
-            expandBranch(fNode.getFile(), node);
-            
-            Desktop desktop = Desktop.getDesktop();
             try{
-                if (!fNode.getFile().isDirectory()){
-                    desktop.open(fNode.getFile());
+                FileNode fNode = (FileNode) node.getUserObject();
+                //System.out.println(fNode.toString());
+                expandBranch(fNode.getFile(), node);
+            
+                Desktop desktop = Desktop.getDesktop();
+                try{
+                    if (!fNode.getFile().isDirectory()){
+                        filePanel.setCurrentFile(fNode.getFile());
+                        desktop.open(fNode.getFile());
+                    }
+                    else {
+                        filePanel.fillList(fNode.getFile());
+                        //filePanel.fillList(new File(fNode.getFile().getName()));
+                    }
                 }
-                else filePanel.fillList(new File(fNode.getFile().getName()));
+                catch (IOException ex){
+                }
             }
-            catch (IOException ex){
-                
+            catch(java.lang.ClassCastException ex){
             }
         }
     }

@@ -17,7 +17,8 @@ import javax.swing.KeyStroke;
  * @author Eric, Kevin
  */
 public class DeleteDialog extends javax.swing.JDialog {
-
+    boolean canceled = false;
+    
     public void setDeleteLabel(String s){
         deleteLabel.setText("Delete?: " + s);
     }
@@ -134,6 +135,7 @@ public class DeleteDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        canceled = true;
         doClose(RET_CANCEL);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
@@ -141,6 +143,7 @@ public class DeleteDialog extends javax.swing.JDialog {
      * Closes the dialog
      */
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
+        canceled = true;
         doClose(RET_CANCEL);
     }//GEN-LAST:event_closeDialog
     

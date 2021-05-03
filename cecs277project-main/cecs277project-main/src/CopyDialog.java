@@ -18,6 +18,7 @@ import javax.swing.KeyStroke;
  */
 public class CopyDialog extends javax.swing.JDialog {
     String fromString, toString;
+    boolean canceled = false;
     public String getToField(){
         return toTextField.getText();
     }
@@ -85,6 +86,7 @@ public class CopyDialog extends javax.swing.JDialog {
                 closeDialog(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -92,6 +94,8 @@ public class CopyDialog extends javax.swing.JDialog {
                 okButtonActionPerformed(evt);
             }
         });
+        getContentPane().add(okButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(307, 46, 80, -1));
+        getRootPane().setDefaultButton(okButton);
 
         cancelButton.setText("Cancel");
         cancelButton.addActionListener(new java.awt.event.ActionListener() {
@@ -99,75 +103,34 @@ public class CopyDialog extends javax.swing.JDialog {
                 cancelButtonActionPerformed(evt);
             }
         });
+        getContentPane().add(cancelButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(307, 87, 80, -1));
 
         directoryLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         directoryLabel.setText("Current Directory:    ");
+        getContentPane().add(directoryLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 25, -1, -1));
 
+        fromTextField.setEditable(false);
         fromTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fromTextFieldActionPerformed(evt);
             }
         });
+        getContentPane().add(fromTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 47, 250, -1));
 
         toTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 toTextFieldActionPerformed(evt);
             }
         });
+        getContentPane().add(toTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(51, 88, 250, -1));
 
         fromLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         fromLabel.setText("From:");
+        getContentPane().add(fromLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 49, -1, -1));
 
         toLabel.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         toLabel.setText("To:");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(directoryLabel)
-                        .addGap(177, 177, 177))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(toLabel)
-                            .addGap(22, 22, 22)
-                            .addComponent(toTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(fromLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(fromTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(okButton, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cancelButton))
-                .addContainerGap(14, Short.MAX_VALUE))
-        );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cancelButton, okButton});
-
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(directoryLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fromTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(fromLabel)
-                    .addComponent(okButton))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(toTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(toLabel)
-                    .addComponent(cancelButton))
-                .addGap(10, 10, 10))
-        );
-
-        getRootPane().setDefaultButton(okButton);
+        getContentPane().add(toLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -177,6 +140,7 @@ public class CopyDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_okButtonActionPerformed
 
     private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        canceled = true;
         doClose(RET_CANCEL);
     }//GEN-LAST:event_cancelButtonActionPerformed
 
@@ -184,6 +148,7 @@ public class CopyDialog extends javax.swing.JDialog {
      * Closes the dialog
      */
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
+        canceled = true;
         doClose(RET_CANCEL);
     }//GEN-LAST:event_closeDialog
 
