@@ -123,6 +123,17 @@ public class FilePanel extends JPanel {
         scrollPane.repaint();
     }
     
+    public void rename(File file, String name) {
+        for (int i = 0; i < model.getSize(); i++) {
+            FileNode fileNode = (FileNode)model.getElementAt(i);
+            if (fileNode.getFile().equals(file)) {
+                file.renameTo(new File(name));
+                fillList(file.getParentFile());
+            }
+        }
+        scrollPane.repaint();
+    }
+    
     public void setCurrentFile(File file){
         currentFile = file;
     }
@@ -198,9 +209,10 @@ public class FilePanel extends JPanel {
                 renameDlg.setDirectoryLabel(currentFile.toString());
                 renameDlg.setFromField(currentFile.toString());
                 renameDlg.setVisible(true);
-                if (!renameDlg.canceled){
+                if (renameDlg.getReturnStatus() == 1){
                     String toField = renameDlg.getToField();
                     System.out.println("toField: " + toField);
+                    rename(getCurrentFile(), toField);
                 }
             }
             else if (e.getActionCommand().equals("Delete")){

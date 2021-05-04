@@ -260,10 +260,10 @@ class App extends JFrame {
                 renameDlg.setDirectoryLabel(fp.getCurrentFile().toString());
                 renameDlg.setFromField(fp.getCurrentFile().toString());
                 renameDlg.setVisible(true);
-                if (!renameDlg.canceled){
+                if (renameDlg.getReturnStatus() == 1){
                     String toField = renameDlg.getToField();
                     System.out.println("toField: " + toField);
-                    fp.getCurrentFile().renameTo(new File(toField));
+                    fp.rename(fp.getCurrentFile(), toField);
                 }
             }
             else if (e.getActionCommand().equals("Delete")){
