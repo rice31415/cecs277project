@@ -263,6 +263,7 @@ class App extends JFrame {
                 if (!renameDlg.canceled){
                     String toField = renameDlg.getToField();
                     System.out.println("toField: " + toField);
+                    fp.getCurrentFile().renameTo(new File(toField));
                 }
             }
             else if (e.getActionCommand().equals("Delete")){
@@ -275,8 +276,10 @@ class App extends JFrame {
                 DeleteDialog deleteDlg = new DeleteDialog(null, true);
                 deleteDlg.setDeleteLabel(fp.getCurrentFile().toString());
                 deleteDlg.setVisible(true);
-                if (!deleteDlg.canceled){
+                if (deleteDlg.getReturnStatus() == 1){
                     System.out.println("Deleting file");
+                    fp.delete(fp.getCurrentFile());
+                    
                 }
             }
             else if(e.getActionCommand().equals("Details")) {

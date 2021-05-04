@@ -112,6 +112,17 @@ public class FilePanel extends JPanel {
         scrollPane.repaint();
     }
     
+    public void delete(File file) {
+        for (int i = 0; i < model.getSize(); i++) {
+            FileNode fileNode = (FileNode)model.getElementAt(i);
+            if (fileNode.getFile().equals(file)) {
+                file.delete();
+                model.remove(i);
+            }
+        }
+        scrollPane.repaint();
+    }
+    
     public void setCurrentFile(File file){
         currentFile = file;
     }
@@ -129,7 +140,7 @@ public class FilePanel extends JPanel {
                     String temp = (String)event.getTransferable().getTransferData(DataFlavor.stringFlavor);
                     String[] next = temp.split("\\n");
                     for(int i=0; i<next.length;i++) {
-                        model.addElement(next[i]); 
+                        model.addElement(next[i]);
                     }
                 }
                 else{ 
@@ -137,7 +148,8 @@ public class FilePanel extends JPanel {
                     //process input
                     for (Object o: result) {
                         System.out.println(o.toString());
-                        model.addElement(o.toString());
+                        FileNode fNode = new FileNode(o.toString());
+                        model.addElement(fNode);
                         //Files.copy((File)o, get current directory path;
                     }
                 }
@@ -195,8 +207,9 @@ public class FilePanel extends JPanel {
                 DeleteDialog deleteDlg = new DeleteDialog(null, true);
                 deleteDlg.setDeleteLabel(currentFile.toString());
                 deleteDlg.setVisible(true);
-                if (!deleteDlg.canceled){
+                if (deleteDlg.getReturnStatus() == 1){
                     System.out.println("Deleting file");
+                    delete(getCurrentFile());
                 }
             }
         }
@@ -206,6 +219,9 @@ public class FilePanel extends JPanel {
         @Override
         public void valueChanged(ListSelectionEvent evt) {
             if (!evt.getValueIsAdjusting()) {
+                if (fileList.getSelectedValue() == null) {
+                    return;
+                }
                 FileNode fileNode = (FileNode)fileList.getSelectedValue();
                 File file = fileNode.getFile();
                 Desktop desktop = Desktop.getDesktop();
@@ -216,7 +232,7 @@ public class FilePanel extends JPanel {
                     }
                 }
                 catch (IOException ex){
-                    
+                    System.out.println(ex.toString());
                 }
             }
             
