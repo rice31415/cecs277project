@@ -10,6 +10,7 @@ import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.DefaultTreeModel;
 
 /*
@@ -36,6 +37,9 @@ public class DirPanel extends JPanel{
         scrollPane.setSize(new Dimension(400, 4000));
         dirTree.setSize(scrollPane.getSize());
         dirTree.addTreeSelectionListener(new treeSelectionListener());
+        
+        DefaultTreeCellRenderer renderer = (DefaultTreeCellRenderer) dirTree.getCellRenderer();
+        renderer.setLeafIcon(renderer.getClosedIcon());
     }
     
     //TODO: Some file icons not updating when expanding branches
@@ -62,7 +66,9 @@ public class DirPanel extends JPanel{
             for (int i = 0; i < subFiles.length; i++){
                 FileNode fileNode = new FileNode(subFiles[i].toString());
                 subnode = new DefaultMutableTreeNode(fileNode);
-                node.add(subnode);
+                if (node.getChildCount() != subFiles.length){
+                    node.add(subnode);
+                }
             }
         }
     }

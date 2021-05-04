@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDesktopPane;
@@ -40,6 +42,7 @@ class App extends JFrame {
     JToolBar toolBar;
     JComboBox drives;
     File currentDrive;
+    List<FileManagerFrame> fileManFrames;
     
     public App() {
         mainPanel = new JPanel();
@@ -51,6 +54,7 @@ class App extends JFrame {
         statusBar = new JMenuBar();
         toolBar = new JToolBar();
         currentDrive = new File("C:\\");
+        fileManFrames = new ArrayList<>();
         
         mainPanel.setLayout(new BorderLayout());
         topPanel.setLayout(new BorderLayout());
@@ -67,6 +71,7 @@ class App extends JFrame {
         topPanel.add(toolBar, BorderLayout.SOUTH);
         
         FileManagerFrame fileManFrame = new FileManagerFrame(new File("C:\\"));
+        fileManFrames.add(fileManFrame);
         desktopPane.add(fileManFrame);
         
         mainPanel.add(topPanel, BorderLayout.NORTH);
@@ -119,6 +124,9 @@ class App extends JFrame {
         treeMenu.add(expand);
         treeMenu.add(col);
         
+        expand.addActionListener(new MainActionListener());
+        col.addActionListener(new MainActionListener());
+        
         menuBar.add(treeMenu);
     }
     
@@ -132,6 +140,7 @@ class App extends JFrame {
         winMenu.add(cascade);
         
         newWin.addActionListener(new MainActionListener());
+        cascade.addActionListener(new MainActionListener());
         
         menuBar.add(winMenu);
     }
@@ -225,7 +234,9 @@ class App extends JFrame {
                 System.out.println("OK Button Pressed");
             }
             else if (e.getActionCommand().equals("New")){
-                desktopPane.add(new FileManagerFrame(currentDrive));
+                FileManagerFrame FMF = new FileManagerFrame(currentDrive);
+                desktopPane.add(FMF);
+                fileManFrames.add(FMF);
             }
             //When a new drive is selected in drive list:
             else if (e.getActionCommand().equals("comboBoxChanged")){
@@ -297,6 +308,21 @@ class App extends JFrame {
                 }
                 FilePanel fp = active.filePanel;
                 fp.setDetail(false);
+            }
+            else if (e.getActionCommand().equals("Cascade")){
+                int offset = 0;
+                for (int i = 0; i < fileManFrames.size(); i++){
+                    if (!fileManFrames.get(i).isClosed){
+                        fileManFrames.get(i).setBounds(offset, offset, 500, 500);
+                        offset += 25;
+                    }
+                }
+            }
+            else if (e.getActionCommand().equals("Collapse Branch")){
+                System.out.println("Branch collapsed");
+            }
+            else if (e.getActionCommand().equals("Expand Branch")){
+                System.out.println("Branch expanded");
             }
             else {
                 System.out.println("Cancel Button Pressed");

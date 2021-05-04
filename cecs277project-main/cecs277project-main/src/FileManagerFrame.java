@@ -3,6 +3,8 @@ import java.awt.Dimension;
 import java.io.File;
 import javax.swing.JInternalFrame;
 import javax.swing.JSplitPane;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,6 +20,7 @@ public class FileManagerFrame extends JInternalFrame{
     JSplitPane splitPane;
     DirPanel dirPanel;
     FilePanel filePanel;
+    boolean isClosed;
     
     public FileManagerFrame(File file) {
         dirPanel = new DirPanel(file);
@@ -25,6 +28,7 @@ public class FileManagerFrame extends JInternalFrame{
         dirPanel.setFilePanel(filePanel);
         this.setTitle(file.toString()); 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, dirPanel, filePanel);
+        isClosed = false;
         
         setMinimumSize();
         
@@ -32,9 +36,15 @@ public class FileManagerFrame extends JInternalFrame{
         this.setClosable(true);
         this.setMaximizable(true);
         this.setIconifiable(true);
-        this.setSize(500, 500);
+        this.setBounds(0, 100, 500, 500);
         this.setResizable(true);
         this.setVisible(true);
+        
+        addInternalFrameListener(new InternalFrameAdapter(){
+            public void internalFrameClosing(InternalFrameEvent e) {
+                isClosed = true;
+            }
+        });
     }
     
     private void setMinimumSize(){
