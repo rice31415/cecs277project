@@ -28,17 +28,14 @@ public class AboutDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         title = new javax.swing.JLabel();
-        description = new javax.swing.JLabel();
         okButton = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         title.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        title.setText("About");
-
-        description.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        description.setText("A description about this project.");
+        title.setText("CECS 277 File Manager");
 
         okButton.setText("OK");
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -46,6 +43,8 @@ public class AboutDialog extends javax.swing.JDialog {
                 okButtonActionPerformed(evt);
             }
         });
+
+        jLabel1.setText("copyright (c) 2021  Eric Wang, Kevin Kubota");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -55,25 +54,23 @@ public class AboutDialog extends javax.swing.JDialog {
                 .addGap(176, 176, 176)
                 .addComponent(okButton)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(128, Short.MAX_VALUE)
-                .addComponent(description)
-                .addGap(116, 116, 116))
             .addGroup(layout.createSequentialGroup()
-                .addGap(167, 167, 167)
-                .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(95, 95, 95)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addContainerGap(100, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addComponent(title, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(83, 83, 83)
-                .addComponent(description)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
                 .addComponent(okButton)
-                .addGap(45, 45, 45))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         pack();
@@ -127,7 +124,7 @@ public class AboutDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel description;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton okButton;
     private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables

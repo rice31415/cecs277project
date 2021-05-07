@@ -84,7 +84,6 @@ class App extends JFrame {
         setVisible(true);
     }
     
-    //Creates the top menu bar based on Hoffman's directions
     private void buildMenu() {
         buildFileMenu();
         buildTreeMenu();
@@ -104,6 +103,7 @@ class App extends JFrame {
         rename.addActionListener(new MainActionListener());
         copy.addActionListener(new MainActionListener());
         delete.addActionListener(new MainActionListener());
+        run.addActionListener(new MainActionListener());
         exit.addActionListener(new MainActionListener());
         
         fileMenu.add(rename);
@@ -154,6 +154,7 @@ class App extends JFrame {
         helpMenu.add(helpItem);
         helpMenu.add(about);
         
+        helpItem.addActionListener(new MainActionListener());
         about.addActionListener(new MainActionListener());
         
         menuBar.add(helpMenu);
@@ -182,7 +183,6 @@ class App extends JFrame {
         
     }
     
-    //Info for Status Bar, need to convert space into MB/GB
     private String displayDiskStatus(File diskPath) {
         String status = "Current Drive: " + diskPath +
                         "    Free Space: " + (int)(diskPath.getFreeSpace()/(Math.pow(10,9))) + 
@@ -252,12 +252,11 @@ class App extends JFrame {
                 FilePanel fp = active.filePanel;
                 
                 CopyDialog copyDlg = new CopyDialog(null, true);
-                copyDlg.setDirectoryLabel(fp.getCurrentFile().toString());
-                copyDlg.setFromField(fp.getCurrentFile().toString());
+                copyDlg.setDirectoryLabel(fp.getCurrentFile().getParent());
+                copyDlg.setFromField(fp.getCurrentFile().getName());
                 copyDlg.setVisible(true);
                 if (copyDlg.getReturnStatus() == 1){
                     String toField = copyDlg.getToField();
-                    System.out.println("toField: " + toField);
                     try {
                         fp.copy(fp.getCurrentFile(), toField);
                     } catch (IOException ex) {
@@ -273,12 +272,11 @@ class App extends JFrame {
                 FilePanel fp = active.filePanel;
                 
                 RenameDialog renameDlg = new RenameDialog(null, true);
-                renameDlg.setDirectoryLabel(fp.getCurrentFile().toString());
-                renameDlg.setFromField(fp.getCurrentFile().toString());
+                renameDlg.setDirectoryLabel(fp.getCurrentFile().getParent());
+                renameDlg.setFromField(fp.getCurrentFile().getName());
                 renameDlg.setVisible(true);
                 if (renameDlg.getReturnStatus() == 1){
                     String toField = renameDlg.getToField();
-                    System.out.println("toField: " + toField);
                     fp.rename(fp.getCurrentFile(), toField);
                 }
             }
@@ -329,11 +327,13 @@ class App extends JFrame {
             else if (e.getActionCommand().equals("Expand Branch")){
                 System.out.println("Branch expanded");
             }
-            else {
-                System.out.println("Cancel Button Pressed");
+            else if (e.getActionCommand().equals("Help")){
+                System.out.println("No help for you!");
+            }
+            else if (e.getActionCommand().equals("Run")){
+                System.out.println("Running...");
             }
         }
     }
-    
 }
 

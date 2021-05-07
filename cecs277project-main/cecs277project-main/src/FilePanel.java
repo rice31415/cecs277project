@@ -197,12 +197,11 @@ public class FilePanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             if (e.getActionCommand().equals("Copy")){
                 CopyDialog copyDlg = new CopyDialog(null, true);
-                copyDlg.setDirectoryLabel(currentFile.toString());
-                copyDlg.setFromField(currentFile.toString());
+                copyDlg.setDirectoryLabel(currentFile.getParent());
+                copyDlg.setFromField(currentFile.getName());
                 copyDlg.setVisible(true);
                 if (copyDlg.getReturnStatus() == 1){
                     String toField = copyDlg.getToField();
-                    System.out.println("toField: " + toField);
                     try {
                         copy(currentFile, toField);
                     } catch (IOException ex) {
@@ -212,12 +211,11 @@ public class FilePanel extends JPanel {
             }
             else if (e.getActionCommand().equals("Rename")){
                 RenameDialog renameDlg = new RenameDialog(null, true);
-                renameDlg.setDirectoryLabel(currentFile.toString());
-                renameDlg.setFromField(currentFile.toString());
+                renameDlg.setDirectoryLabel(currentFile.getParent());
+                renameDlg.setFromField(currentFile.getName());
                 renameDlg.setVisible(true);
                 if (renameDlg.getReturnStatus() == 1){
                     String toField = renameDlg.getToField();
-                    System.out.println("toField: " + toField);
                     rename(getCurrentFile(), toField);
                 }
             }

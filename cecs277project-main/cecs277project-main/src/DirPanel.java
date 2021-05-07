@@ -42,7 +42,6 @@ public class DirPanel extends JPanel{
         renderer.setLeafIcon(renderer.getClosedIcon());
     }
     
-    //TODO: Some file icons not updating when expanding branches
     private void buildTree(File rootFile){
         DefaultMutableTreeNode root = new DefaultMutableTreeNode(rootFile.toString());
         treeModel = new DefaultTreeModel(root);
