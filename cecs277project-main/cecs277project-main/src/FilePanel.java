@@ -14,10 +14,13 @@ import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
@@ -97,6 +100,9 @@ public class FilePanel extends JPanel {
         files = dir.listFiles();
         model.clear();
         fileList.removeAll();
+        if (files == null) {
+            return;
+        }
         for(int i = 0; i < files.length; i++) {
             FileNode fileNode = new FileNode(files[i].toString(), files[i]);
             model.addElement(fileNode);
@@ -113,25 +119,20 @@ public class FilePanel extends JPanel {
     }
     
     public void delete(File file) {
-        for (int i = 0; i < model.getSize(); i++) {
-            FileNode fileNode = (FileNode)model.getElementAt(i);
-            if (fileNode.getFile().equals(file)) {
-                file.delete();
-                model.remove(i);
-            }
-        }
+        file.delete();
+        fillList(currentFile);
         scrollPane.repaint();
     }
     
     public void rename(File file, String name) {
-        for (int i = 0; i < model.getSize(); i++) {
-            FileNode fileNode = (FileNode)model.getElementAt(i);
-            if (fileNode.getFile().equals(file)) {
-                file.renameTo(new File(name));
-                fillList(file.getParentFile());
-            }
-        }
+        file.renameTo(new File(name));
+        fillList(currentFile);
         scrollPane.repaint();
+    }
+    
+    public void copy(File file, String dest) throws IOException {
+        File destFile = new File(dest);
+        Files.copy(file.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
     }
     
     public void setCurrentFile(File file){
@@ -159,7 +160,7 @@ public class FilePanel extends JPanel {
                     //process input
                     for (Object o: result) {
                         System.out.println(o.toString());
-                        FileNode fNode = new FileNode(o.toString());
+                        FileNode fNode = new FileNode(o.toString(), (File)o);
                         model.addElement(fNode);
                         //Files.copy((File)o, get current directory path;
                     }
@@ -199,9 +200,14 @@ public class FilePanel extends JPanel {
                 copyDlg.setDirectoryLabel(currentFile.toString());
                 copyDlg.setFromField(currentFile.toString());
                 copyDlg.setVisible(true);
-                if (!copyDlg.canceled){
+                if (copyDlg.getReturnStatus() == 1){
                     String toField = copyDlg.getToField();
                     System.out.println("toField: " + toField);
+                    try {
+                        copy(currentFile, toField);
+                    } catch (IOException ex) {
+                        System.out.println(ex.toString());
+                    }
                 }
             }
             else if (e.getActionCommand().equals("Rename")){

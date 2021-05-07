@@ -255,9 +255,14 @@ class App extends JFrame {
                 copyDlg.setDirectoryLabel(fp.getCurrentFile().toString());
                 copyDlg.setFromField(fp.getCurrentFile().toString());
                 copyDlg.setVisible(true);
-                if (!copyDlg.canceled){
+                if (copyDlg.getReturnStatus() == 1){
                     String toField = copyDlg.getToField();
                     System.out.println("toField: " + toField);
+                    try {
+                        fp.copy(fp.getCurrentFile(), toField);
+                    } catch (IOException ex) {
+                        System.out.println(ex.toString());
+                    }
                 }
             }
             else if (e.getActionCommand().equals("Rename")){
