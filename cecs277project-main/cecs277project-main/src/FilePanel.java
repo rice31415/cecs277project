@@ -2,6 +2,7 @@
 import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DropTarget;
@@ -58,7 +59,9 @@ public class FilePanel extends JPanel {
         this.add(scrollPane, BorderLayout.CENTER);
         scrollPane.setSize(new Dimension(400, 4000));
         fileList.setSize(scrollPane.getSize());
-        fileList.addListSelectionListener(new fileSelectionListener());
+        MouseListener mouseListener = new mouseListener();
+        fileList.addMouseListener(mouseListener);
+        fileList.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 12));
         
         this.add(scrollPane);
         this.setDropTarget(new MyDropTarget());
@@ -90,9 +93,6 @@ public class FilePanel extends JPanel {
         popup.add(copy);
         popup.add(rename);
         popup.add(delete);
-        
-        MouseListener popupListener = new PopupListener();
-        fileList.addMouseListener(popupListener);
     }
     
     public void fillList(File dir) {
@@ -143,7 +143,7 @@ public class FilePanel extends JPanel {
         return currentFile;
     }
     
-    class MyDropTarget extends DropTarget {
+    private class MyDropTarget extends DropTarget {
         public void drop(DropTargetDropEvent event) {
             try {
                 event.acceptDrop(DnDConstants.ACTION_COPY);
@@ -172,7 +172,26 @@ public class FilePanel extends JPanel {
         }
     }
     
-    class PopupListener extends MouseAdapter {
+    private class mouseListener extends MouseAdapter {
+        public void mouseClicked(MouseEvent e){
+            if(e.getClickCount()==2){
+                if (fileList.getSelectedValue() == null) {
+                    return;
+                }
+                FileNode fileNode = (FileNode)fileList.getSelectedValue();
+                File file = fileNode.getFile();
+                Desktop desktop = Desktop.getDesktop();
+                try{
+                    if (!file.isDirectory()){
+                        currentFile = file;
+                        desktop.open(file);
+                    }
+                }
+                catch (IOException ex){
+                    System.out.println(ex.toString());
+                }
+            }
+        }
         public void mousePressed(MouseEvent e) {
             maybeShowPopup(e);
         }
@@ -228,30 +247,6 @@ public class FilePanel extends JPanel {
                     delete(getCurrentFile());
                 }
             }
-        }
-    }
-    private class fileSelectionListener implements ListSelectionListener {
-
-        @Override
-        public void valueChanged(ListSelectionEvent evt) {
-            if (!evt.getValueIsAdjusting()) {
-                if (fileList.getSelectedValue() == null) {
-                    return;
-                }
-                FileNode fileNode = (FileNode)fileList.getSelectedValue();
-                File file = fileNode.getFile();
-                Desktop desktop = Desktop.getDesktop();
-                try{
-                    if (!file.isDirectory()){
-                        currentFile = file;
-                        desktop.open(file);
-                    }
-                }
-                catch (IOException ex){
-                    System.out.println(ex.toString());
-                }
-            }
-            
         }
     }
 }

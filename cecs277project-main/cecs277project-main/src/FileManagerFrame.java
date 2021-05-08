@@ -36,7 +36,7 @@ public class FileManagerFrame extends JInternalFrame{
         this.setClosable(true);
         this.setMaximizable(true);
         this.setIconifiable(true);
-        this.setBounds(0, 100, 500, 500);
+        this.setBounds(0, 100, 700, 500);
         this.setResizable(true);
         this.setVisible(true);
         

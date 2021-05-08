@@ -40,13 +40,9 @@ class FileNode {
         if (detail) {
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
             DecimalFormat dFormatter = new DecimalFormat("#,###");
-            //file.getName()
-            String str = String.format("%-40s%40s%40s", file.getName(), 
+            String str = String.format("%-25s%s%15s", file.getName(), 
                         formatter.format(file.lastModified()),
                         dFormatter.format(file.length()));
-            /*return file.getAbsolutePath() + 
-                    formatter.format(file.lastModified()) +
-                    dFormatter.format(file.length());*/
             return str;
         }
         else return file.getName();
